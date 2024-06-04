@@ -1,0 +1,29 @@
+.containerButtons {
+    height: 20rem;
+    width: 80%;
+    border-collapse: collapse;
+}
+  
+.buttons button {
+    background-color: #ffffffCC;
+    color: #000;
+    width: 70px;
+    height: 3.6rem;
+    font-size: 19px;
+    font-family: 'Times New Roman', Times, serif;
+    border: 2px solid #ffffff;
+}
+
+.buttonRow button{
+    height: 7.5rem;
+}
+
+.buttonCol button{
+    width: 140px;
+}
+
+.buttons button:hover {
+    background-color: #00a8ffCC;
+    color: #fff;
+    border: 2px solid #ffffff;
+}
