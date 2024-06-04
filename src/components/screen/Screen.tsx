@@ -1,10 +1,11 @@
+import { ScreenProps } from "../../types/ScreenProps"
 import style from "./Screen.module.css"
 
 
-function Screen() {
+function Screen({expression}:ScreenProps) {
   return (
     <div className= {`${style.screen}`}>
-        <p className={`${style.text}`}>0</p>
+        <p className={`${style.text}`}>{expression}</p>
     </div>
   )
 }
