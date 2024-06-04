@@ -1,3 +1,4 @@
+import CalculatorService from "../../services/CalculatorService"
 import { ContainerButtonsProps } from "../../types/ContainerButtonsProps"
 import style from "./ContainerButtons.module.css"
 
@@ -17,7 +18,14 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
     setExpression(newExpression)
   }
   const sendResult = () => {
-    console.log(expression);
+    const fetchData = async () => {
+      const data = CalculatorService.calculate(expression)
+      data.then((value) => {
+        setExpression(value)
+      })
+
+    }
+    fetchData();
   }
   const clear = () => {
     setExpression("0")
