@@ -1,9 +1,10 @@
 import style from "./Calculator.module.css"
+import Screen from '../screen/Screen'
 
 function Calculator() {
   return (
     <div className={`${style.calculatorContainer}`}>
-        <div className= {`${style.screen}`}></div>
+        <Screen />
         <table className={`${style.containerButtons}`}>
           <tr className={`${style.buttons}`}>
             <td><button>C</button></td>
