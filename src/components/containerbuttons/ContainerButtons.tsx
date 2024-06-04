@@ -6,7 +6,7 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
   const sendExpression = (value:string) => {
     const signal = ["+","-","*","/"]
     let newExpression = ""
-    if (expression === "0"){
+    if (expression === "0" && value != "."){
       newExpression = value
     }else{
       if (signal.includes(value) || signal.includes(expression.charAt(expression.length - 1))){
@@ -57,7 +57,7 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
     </tr>
     <tr className={`${style.buttons}`}>
       <td colSpan={2} className={`${style.buttonCol}`} onClick={() => sendExpression("0")}><button>0</button></td>
-      <td><button>.</button></td>
+      <td><button onClick={() => sendExpression(".")}>.</button></td>
     </tr>
   </table>
   )
