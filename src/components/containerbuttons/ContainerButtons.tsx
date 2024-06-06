@@ -3,10 +3,11 @@ import { ContainerButtonsProps } from "../../types/ContainerButtonsProps"
 import style from "./ContainerButtons.module.css"
 
 function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
+  const signal = ["+","-","*","/"]
   const sendExpression = (value:string) => {
-    const signal = ["+","-","*","/"]
+    
     let newExpression = ""
-    if (expression === "0" && value != "."){
+    if ((expression === "0" && value != "." && !signal.includes(value)) || expression === "Invalid record error"){
       newExpression = value
     }else{
       if (signal.includes(value) || signal.includes(expression.charAt(expression.length - 1))){
@@ -18,18 +19,59 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
     setExpression(newExpression)
   }
   const sendResult = () => {
-    const fetchData = async () => {
-      const data = CalculatorService.calculate(expression)
-      data.then((value) => {
-        setExpression(value)
-      })
+    console.log("-> " + isOnlyNumbers(expression));
 
+    if (!endWithSignal(expression) && !isOnlyNumbers(expression)){
+      const fetchData = async () => {
+        const data = CalculatorService.calculate(expression)
+        data.then((value) => {
+          setExpression(value)
+        })
+  
+      }
+      fetchData();  
+    }else{
+      setExpression("Invalid record error")
     }
-    fetchData();
   }
+
+  const endWithSignal = (expression:string) => {
+     let isEndWithSignal = false;
+    signal.forEach((it:string) => {
+      if (expression.endsWith(it)){
+        isEndWithSignal = true
+      }
+    })
+    return isEndWithSignal
+  }
+
+  const isOnlyNumbers = (expression:string) => {
+    const isOnlyNumbersRegex: RegExp = new RegExp('^([0-9]*)$')
+    let isOnlyNumbers = false;
+
+    if (expression.indexOf(".") === -1){
+      isOnlyNumbers = isOnlyNumbersRegex.test(expression)
+    }else{
+      const dividedExpression = expression.split(".");
+    if (dividedExpression.length == 2){
+      console.log(dividedExpression);
+      dividedExpression.forEach( (it:string) => {
+        if (isOnlyNumbersRegex.test(it.trim())){
+          isOnlyNumbers = true
+        }
+      })
+    }else{
+      isOnlyNumbers = true
+      }
+    }
+   
+    return isOnlyNumbers
+  } 
+
   const clear = () => {
     setExpression("0")
   }
+
   return (
     <table className={`${style.containerButtons}`}>
     <tr className={`${style.buttons}`}>
