@@ -119,9 +119,21 @@ const thereIsOperation = (operationDivided:string[]) => {
    return operationDivided.length > 3
 }
 
+const endWithSignal = (expression:string) => {
+   const signal = ["+","-","*","/"]
+   let isEndWithSignal = false;
+   signal.forEach((it:string) => {
+    if (expression.endsWith(it)){
+      isEndWithSignal = true
+    }
+  })
+  return isEndWithSignal
+}
+
 
 const CalculatorService = {
-    calculate
+    calculate,
+    endWithSignal
 }
 
 export default CalculatorService

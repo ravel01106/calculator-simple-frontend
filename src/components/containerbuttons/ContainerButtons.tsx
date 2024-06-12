@@ -27,23 +27,13 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
 
   const sendResult = () => {
 
-    if (!endWithSignal(expression) && !isOnlyNumbers(expression)){
+    if (!CalculatorService.endWithSignal(expression) && !isOnlyNumbers(expression)){
       const expressionWithBrackets = "( " + expression + " )"
       const data = CalculatorService.calculate(expressionWithBrackets)
       setExpression(data) 
     }else{
       setExpression("Expression error")
     }
-  }
-
-  const endWithSignal = (expression:string) => {
-     let isEndWithSignal = false;
-    signal.forEach((it:string) => {
-      if (expression.endsWith(it)){
-        isEndWithSignal = true
-      }
-    })
-    return isEndWithSignal
   }
 
   const isOnlyNumbers = (expression:string) => {
@@ -55,7 +45,7 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
         isOnlyNumbers = true
       }
       return isOnlyNumbers
-    }
+  }
 
   const clear = () => {
     setExpression("0")
