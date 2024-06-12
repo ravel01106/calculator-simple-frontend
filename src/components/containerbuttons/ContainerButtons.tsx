@@ -1,27 +1,32 @@
 import CalculatorService from "../../services/CalculatorService"
 import { ContainerButtonsProps } from "../../types/ContainerButtonsProps"
+import CheckExpression from "../../utils/CheckExpression"
 import style from "./ContainerButtons.module.css"
 
 function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
-  const signal = ["+","-","*","/"]
+
   const sendExpression = (value:string) => {
     
     let newExpression = ""
-    if ((expression === "0" && value != "." && !signal.includes(value)) || expression === "Invalid record error"){
+    if ((CheckExpression.isZero(expression) && CheckExpression.isNumber(value)) || CheckExpression.isError(expression)){
       newExpression = value
     }else{
-      if (signal.includes(value) || signal.includes(expression.charAt(expression.length - 1))){
+      if (CheckExpression.isSignal(value) || CheckExpression.thereIsAlreadySignal(expression)){
         newExpression = expression + " " + value
       }else{
-        newExpression = expression + value
+        if (CheckExpression.thereIsPointAtTheEndExpression(expression,value)) {
+          newExpression = expression
+        }else{
+          newExpression = expression + value
+        }
       }
     }
     setExpression(newExpression)
   }
-  const sendResult = () => {
-    console.log("-> " + isOnlyNumbers(expression));
 
-    if (!endWithSignal(expression) && !isOnlyNumbers(expression)){
+
+  const sendResult = () => {
+    if (!CheckExpression.endWithSignal(expression) && !CheckExpression.isOnlyNumbers(expression)){
       const fetchData = async () => {
         const data = CalculatorService.calculate(expression)
         data.then((value) => {
@@ -35,38 +40,6 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
     }
   }
 
-  const endWithSignal = (expression:string) => {
-     let isEndWithSignal = false;
-    signal.forEach((it:string) => {
-      if (expression.endsWith(it)){
-        isEndWithSignal = true
-      }
-    })
-    return isEndWithSignal
-  }
-
-  const isOnlyNumbers = (expression:string) => {
-    const isOnlyNumbersRegex: RegExp = new RegExp('^([0-9]*)$')
-    let isOnlyNumbers = false;
-
-    if (expression.indexOf(".") === -1){
-      isOnlyNumbers = isOnlyNumbersRegex.test(expression)
-    }else{
-      const dividedExpression = expression.split(".");
-    if (dividedExpression.length == 2){
-      console.log(dividedExpression);
-      dividedExpression.forEach( (it:string) => {
-        if (isOnlyNumbersRegex.test(it.trim())){
-          isOnlyNumbers = true
-        }
-      })
-    }else{
-      isOnlyNumbers = true
-      }
-    }
-   
-    return isOnlyNumbers
-  } 
 
   const clear = () => {
     setExpression("0")
