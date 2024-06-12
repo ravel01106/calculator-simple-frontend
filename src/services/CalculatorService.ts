@@ -130,10 +130,22 @@ const endWithSignal = (expression:string) => {
   return isEndWithSignal
 }
 
+const isOnlyNumbers = (expression:string) => {
+   console.log("Expression -> " + expression);
+   let isOnlyNumbers = false;
+
+   const expressionDivided = expression.split(" ");
+     if(expressionDivided.length === 1){
+       isOnlyNumbers = true
+     }
+     return isOnlyNumbers
+ }
+
 
 const CalculatorService = {
-    calculate,
-    endWithSignal
+   calculate,
+   endWithSignal,
+   isOnlyNumbers
 }
 
 export default CalculatorService

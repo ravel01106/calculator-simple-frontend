@@ -18,7 +18,6 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
         }else{
           newExpression = expression + value  
         }
-        
       }
     }
     setExpression(newExpression)
@@ -27,24 +26,13 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
 
   const sendResult = () => {
 
-    if (!CalculatorService.endWithSignal(expression) && !isOnlyNumbers(expression)){
+    if (!CalculatorService.endWithSignal(expression) && !CalculatorService.isOnlyNumbers(expression)){
       const expressionWithBrackets = "( " + expression + " )"
       const data = CalculatorService.calculate(expressionWithBrackets)
       setExpression(data) 
     }else{
-      setExpression("Expression error")
+      setExpression("Invalid record error")
     }
-  }
-
-  const isOnlyNumbers = (expression:string) => {
-    console.log("Expression -> " + expression);
-    let isOnlyNumbers = false;
-
-    const expressionDivided = expression.split(" ");
-      if(expressionDivided.length === 1){
-        isOnlyNumbers = true
-      }
-      return isOnlyNumbers
   }
 
   const clear = () => {
