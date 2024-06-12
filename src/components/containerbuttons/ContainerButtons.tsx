@@ -13,23 +13,26 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
       if (signal.includes(value) || signal.includes(expression.charAt(expression.length - 1))){
         newExpression = expression + " " + value
       }else{
-        newExpression = expression + value
+        if (expression.charAt(expression.length - 1) === "." && value === "."){
+          newExpression = expression
+        }else{
+          newExpression = expression + value  
+        }
+        
       }
     }
     setExpression(newExpression)
   }
+
+
   const sendResult = () => {
-    console.log("-> " + isOnlyNumbers(expression));
 
     if (!endWithSignal(expression) && !isOnlyNumbers(expression)){
-      const fetchData = async () => {
-        const data = CalculatorService.calculate(expression)
-        console.log(data);
-  
-      }
-      fetchData();  
+      const expressionWithBrackets = "( " + expression + " )"
+      const data = CalculatorService.calculate(expressionWithBrackets)
+      setExpression(data) 
     }else{
-      setExpression("Invalid record error")
+      setExpression("Expression error")
     }
   }
 
@@ -44,27 +47,15 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
   }
 
   const isOnlyNumbers = (expression:string) => {
-    const isOnlyNumbersRegex: RegExp = new RegExp('^([0-9]*)$')
+    console.log("Expression -> " + expression);
     let isOnlyNumbers = false;
 
-    if (expression.indexOf(".") === -1){
-      isOnlyNumbers = isOnlyNumbersRegex.test(expression)
-    }else{
-      const dividedExpression = expression.split(".");
-    if (dividedExpression.length == 2){
-      console.log(dividedExpression);
-      dividedExpression.forEach( (it:string) => {
-        if (isOnlyNumbersRegex.test(it.trim())){
-          isOnlyNumbers = true
-        }
-      })
-    }else{
-      isOnlyNumbers = true
+    const expressionDivided = expression.split(" ");
+      if(expressionDivided.length === 1){
+        isOnlyNumbers = true
       }
+      return isOnlyNumbers
     }
-   
-    return isOnlyNumbers
-  } 
 
   const clear = () => {
     setExpression("0")
