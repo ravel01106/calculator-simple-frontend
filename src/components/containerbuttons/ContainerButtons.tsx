@@ -1,22 +1,23 @@
 import CalculatorService from "../../services/CalculatorService"
+import CheckExpressionService from "../../services/CheckExpressionService"
 import { ContainerButtonsProps } from "../../types/ContainerButtonsProps"
 import style from "./ContainerButtons.module.css"
 
 function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
-  const signal = ["+","-","*","/"]
   const sendExpression = (value:string) => {
     
     let newExpression = ""
-    if ((expression === "0" && value != "." && !signal.includes(value)) || expression === "Invalid record error"){
+    if ((CheckExpressionService.isZero(expression) && CheckExpressionService.isNumber(value)) || 
+          CheckExpressionService.isError(expression)){
       newExpression = value
     }else{
-      if (signal.includes(value) || signal.includes(expression.charAt(expression.length - 1))){
+      if (CheckExpressionService.isSignal(value) || CheckExpressionService.thereIsAlreadySignal(expression)){
         newExpression = expression + " " + value
       }else{
-        if (expression.charAt(expression.length - 1) === "." && value === "."){
+        if (CheckExpressionService.thereIsPointAtTheEndExpression(expression, value)){
           newExpression = expression
         }else{
-          newExpression = expression + value  
+          newExpression = expression + value
         }
       }
     }
@@ -26,7 +27,7 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
 
   const sendResult = () => {
 
-    if (!CalculatorService.endWithSignal(expression) && !CalculatorService.isOnlyNumbers(expression)){
+    if (!CheckExpressionService.endWithSignal(expression) && !CheckExpressionService.isOnlyNumbers(expression)){
       const expressionWithBrackets = "( " + expression + " )"
       const data = CalculatorService.calculate(expressionWithBrackets)
       setExpression(data) 
