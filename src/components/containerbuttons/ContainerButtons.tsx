@@ -24,9 +24,7 @@ function ContainerButtons({expression, setExpression}:ContainerButtonsProps) {
     if (!endWithSignal(expression) && !isOnlyNumbers(expression)){
       const fetchData = async () => {
         const data = CalculatorService.calculate(expression)
-        data.then((value) => {
-          setExpression(value)
-        })
+        console.log(data);
   
       }
       fetchData();  
